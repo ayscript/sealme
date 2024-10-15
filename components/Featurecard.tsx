@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import React from 'react'
 
 const Featurecard = (props: { children: string | number | bigint | boolean | Iterable<React.ReactNode> | React.ReactPortal | Promise<React.AwaitedReactNode> | null | undefined }) => {
