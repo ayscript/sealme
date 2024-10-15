@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Button from "@/components/Button";
-import Input from "@/components/Input";
-import Chat from "@/components/Chat";
+// import Image from "next/image";
+// import Button from "@/components/Button";
+// import Input from "@/components/Input";
+// import Chat from "@/components/Chat";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Featurecard from "@/components/Featurecard";
