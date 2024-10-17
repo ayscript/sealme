@@ -70,23 +70,6 @@ button:active{
   z-index: -1;
 }
 
-.canvass{
-  background-image: url('/backgroundImg.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-.canvass::after{
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #0E1217C1;
-  z-index: -2;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
