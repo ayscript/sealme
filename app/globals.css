@@ -17,11 +17,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #111827;
-    --foreground: #172136;
+    --background: #0E1217;
+    --foreground: #1C1F26;
     --primary: #3B82F6;
     --secondary: #6366F1;
-    --text: #F9FAFB;
+    --text: #a1a6aa;
     --button: #14B8A6;
   }
 }
@@ -45,6 +45,46 @@ button:active{
   font-size: 3rem;
   font-weight: bold;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.chatBox, .chatBoxSelf{
+  position: relative;
+}
+
+.chatBoxSelf::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -10px;
+  border: 10px solid #FFFFFF00;
+  border-top-color: var(--foreground);
+  z-index: -1;
+}
+.chatBox::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  border: 10px solid #FFFFFF00;
+  border-top-color: var(--foreground);
+  z-index: -1;
+}
+
+.canvass{
+  background-image: url('/backgroundImg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.canvass::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0E1217C1;
+  z-index: -2;
 }
 
 @layer utilities {

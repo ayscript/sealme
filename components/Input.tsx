@@ -1,14 +1,20 @@
-import React from 'react'
+'use client'
+import React, { useState } from 'react'
 import { Send } from './Icon'
 
-const Input = () => {
+
+const Input = (props: any) => {
+  let [text, setText] = useState('')
   return (
-    <div className='bg-transparent border border-solid border-text h-11 text-text focus-within:outline-1 focus-within:outline focus-within:outline-text flex items-center justify-between m-6 px-4 rounded-3xl gap-3'>
-        <input type="text" className='bg-transparent focus:outline-none w-full' placeholder='Write something ...' />
-        <button>
+    <form onSubmit={e => {e.preventDefault()}} className='w-full mt-auto bg-foreground py-3 h-16 text-text flex items-center justify-between px-4'>
+        <input type="text" onChange={e => {setText(e.target.value)}} value={text} className='bg-transparent focus:outline-none w-full h-full' placeholder='Write something ...' />
+        <button onClick={() => {
+          props.onClick(text)
+          setText('')
+          }} className='rounded-full bg-background p-2'>
             <Send />
         </button>
-    </div>
+    </form>
   )
 }
 
