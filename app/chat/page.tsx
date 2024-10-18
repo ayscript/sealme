@@ -4,7 +4,7 @@ import Input from '@/components/Input'
 import React, { useEffect, useRef, useState } from 'react'
 
 
-const page = () => {
+const Page = () => {
 const scrollRef = useRef<HTMLDivElement | null>(null);
 const scrollToBottom = () => {
     if (scrollRef.current) {
@@ -56,4 +56,4 @@ useEffect(() => {
   )
 }
 
-export default page
+export default Page
