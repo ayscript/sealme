@@ -16,23 +16,13 @@ const scrollToBottom = () => {
 const [messagesArray, setMessagesarray] = useState([
     {
         chatType: 'other',
-        textContent: 'Hello World, How are you doing'
-    },
-    {
-        chatType: 'self',
-        textContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere quaerat inventore, modi dolore obcaecati fugiat, tempora expedita odio dicta vero sequi doloremque magni facilis molestiae nulla nisi eveniet totam dolores?'
-    },
-    {
-        chatType: 'other',
-        textContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere quaerat inventore, modi dolore obcaecati fugiat, tempora expedita odio  vero sequi doloremque magni facilis molestiae nulla nisi eveniet totam dolores?'
-    },
-    {
-        chatType: 'self',
-        textContent: 'Hello World, How are you doing today'
+        textContent: 'Welcome to the chat'
     },
 ])
 
-const messageArrayOutput = messagesArray.map(e => <Chat chatType={e.chatType} key={e.textContent}>{e.textContent}</Chat>)
+const messageArrayOutput = messagesArray.map(e => 
+    { return <Chat chatType={e.chatType} key={e.textContent}>{e.textContent}</Chat>}
+)
 
 useEffect(() => {
     scrollToBottom();
@@ -48,8 +38,11 @@ useEffect(() => {
             <Input onClick={function(text: string){
                 if(text){
                     setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text}])
+                    setTimeout(() => {
+                        setMessagesarray(prev => [...prev, {chatType: '', textContent: text}])
+                    }, 3000)
                 }
-                console.log(text)
+                
             }} />
         </div>
     </section>

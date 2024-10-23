@@ -56,9 +56,9 @@ button:active{
   position: absolute;
   top: 0;
   right: -10px;
-  border: 10px solid #FFFFFF00;
+  border: 10px solid transparent;
   border-top-color: var(--foreground);
-  z-index: -1;
+  /* z-index: -1; */
 }
 .chatBox::before{
   content: '';
