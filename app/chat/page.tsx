@@ -53,7 +53,7 @@ const Page = () => {
       </form>
       {
       showPopup ? 
-      <div className='fixed top-0 bottom-0 w-full flex items-center justify-center bg-[#11111165]' onClick={e => {
+      <div className='fixed top-0 bottom-0 w-full flex items-center justify-center bg-[#11111165] dark:bg-[#eeeeee65]' onClick={e => {
         if(e.target === e.currentTarget){
           setShowPopup(false)
         }
