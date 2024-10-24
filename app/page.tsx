@@ -10,8 +10,6 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="body">
-      {/* <Input /> */}
-      {/* <Chat></Chat> */}
       <Header />
       <h1 className="bigText text-center my-6">Seal Me</h1>
       <Hero />

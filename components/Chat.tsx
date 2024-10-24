@@ -7,9 +7,9 @@ type NewType = {
 
 const Chat = (props: NewType) => {
   return (
-    <span className={`bg-foreground text-sm text-text ${props.chatType === 'self' ? 'self-end chatBoxSelf' : 'self-start chatBox'} p-3 rounded m-2 max-w-72 sm:max-w-[50%]`}>
-      {props.children}
-    </span>
+    <p className={`bg-foreground text-sm text-text ${props.chatType === 'self' ? 'self-end chatBoxSelf' : 'self-start chatBox'} p-3 rounded m-2 max-w-72 sm:max-w-[50%]`}>
+      <span className='w-full text-ellipsis overflow-hidden inline-block'>{props.children}</span>
+    </p>
   )
 }
 
