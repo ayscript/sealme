@@ -15,7 +15,7 @@ function randomString(){
   return `${window.location.href}/${chatId}`
 }
 
-const page = () => {
+const Page = () => {
 
   const [showPopup, setShowPopup] = useState(false)
   const [chatLink, setChatLink] = useState('')
@@ -68,4 +68,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
