@@ -1,11 +1,10 @@
 // import Image from "next/image";
-// import Button from "@/components/Button";
+import Button from "@/components/Button";
 // import Input from "@/components/Input";
 // import Chat from "@/components/Chat";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
-import Featurecard from "@/components/Featurecard";
-import Image from "next/image";
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -13,48 +12,22 @@ export default function Home() {
       <Header />
       <h1 className="bigText text-center my-6">Seal Me</h1>
       <Hero />
-      <div className="grid grid-cols-2 mx-auto place-items-center p-4 sm:flex sm:items-center gap-8 justify-center my-10 sm:flex-wrap">
-        <Featurecard>
-          <Image
-          src={'/cartoon.webp'}
-          width={200}
-          height={200}
-          alt='img'
-          className='bg-background rounded-lg'
-          />
-          <h2>Chat Anonymously</h2>
-        </Featurecard>
-        <Featurecard>
-            <Image
-              src={'/speakyourmind.webp'}
-              width={200}
-              height={200}
-              alt='img'
-              className='bg-background rounded-lg'
-            />
-          <h2>Speak Your Mind</h2>
-        </Featurecard>
-        <Featurecard>
-          <Image
-            src={'/Fun.jpg'}
-            width={200}
-            height={200}
-            alt='img'
-            className='bg-background rounded-lg'
-            />
-          <h2>Have Fun</h2>
-        </Featurecard>
-        <Featurecard>
-          <Image
-            src={'/arrow.png'}
-            width={200}
-            height={200}
-            alt='img'
-            className='bg-background rounded-lg'
-            />
-            <h2>Shoot Your Shot</h2>
-        </Featurecard>
-      </div>
+      <section className="p-8 text-center">
+        <p className="text-[14px] mb-4">Create a chat room to get started!
+        </p>
+        <Link href='/chat'>
+          <Button>
+            Create Chat
+          </Button>
+        </Link>
+      </section>
+      <section className="p-8" id="about">
+        <h1 className="mb-4 text-center text-2xl font-bold">About</h1>
+        <h2 className="mb-4 text-12 font-bold">Meet the Developer</h2>
+        <p>
+          This project is built by <span className="text-primary">Ayomide Oaleye</span>, a computer science student of the Federal University of Agriculture, Abeokuta (FUNAAB)
+        </p>
+      </section>
     </div>
   );
 }
