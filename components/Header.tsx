@@ -13,7 +13,7 @@ const Header = () => {
       <nav className='hidden sm:inline-block'>
         <ul className='flex items-center justify-center gap-8'>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/#">About</Link></li>
+            <li><Link href="/#about">About</Link></li>
             <li><Link href="/#">Contact</Link></li>
         </ul>
       </nav>

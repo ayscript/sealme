@@ -20,8 +20,8 @@ const [messagesArray, setMessagesarray] = useState([
     },
 ])
 
-const messageArrayOutput = messagesArray.map(e => 
-    { return <Chat chatType={e.chatType} key={e.textContent}>{e.textContent}</Chat>}
+const messageArrayOutput = messagesArray.map((e, index)=> 
+    { return <Chat chatType={e.chatType} key={index}>{e.textContent}</Chat>}
 )
 
 useEffect(() => {
@@ -37,7 +37,7 @@ useEffect(() => {
             </section>
             <Input onClick={function(text: string){
                 if(text){
-                    setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text}])
+                    setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text.trim()}])
                     setTimeout(() => {
                         setMessagesarray(prev => [...prev, {chatType: '', textContent: text}])
                     }, 3000)

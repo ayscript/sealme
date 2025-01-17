@@ -8,7 +8,7 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="body">
+    <section className="body">
       <Header />
       <h1 className="bigText text-center my-6">Seal Me</h1>
       <Hero />
@@ -25,9 +25,9 @@ export default function Home() {
         <h1 className="mb-4 text-center text-2xl font-bold">About</h1>
         <h2 className="mb-4 text-12 font-bold">Meet the Developer</h2>
         <p>
-          This project is built by <span className="text-primary">Ayomide Oaleye</span>, a computer science student of the Federal University of Agriculture, Abeokuta (FUNAAB)
+          This project is built by <span className="text-primary font-bold">Ayomide Olaleye</span>, a 400 Level Computer Science student of the Federal University of Agriculture, Abeokuta (FUNAAB)
         </p>
       </section>
-    </div>
+    </section>
   );
 }
