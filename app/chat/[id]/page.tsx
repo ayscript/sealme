@@ -16,19 +16,22 @@ const scrollToBottom = () => {
 const [messagesArray, setMessagesarray] = useState([
     {
         chatType: 'other',
-        textContent: 'Welcome to the chat'
+        textContent: 'Welcome to the chat',
+        dateCreated: new Date().toLocaleString("en-GB")
     },
 ])
 
 const messageArrayOutput = messagesArray.map((e, index)=> 
-    { return <Chat chatType={e.chatType} key={index}>{e.textContent}</Chat>}
+    { return <Chat chatType={e.chatType} dateCreated={e.dateCreated} key={index}>{e.textContent}</Chat>} 
 )
 
 useEffect(() => {
     scrollToBottom();
   }, [messagesArray]);
-
-  return (
+  
+  
+  
+  const renderedOutput = (
     <section className='flex flex-col sm:flex-row h-[100svh]'>
         <section className='bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]'></section>
         <div className='flex flex-col w-full sm:w-3/4 h-[90%] sm:h-full'>
@@ -37,16 +40,18 @@ useEffect(() => {
             </section>
             <Input onClick={function(text: string){
                 if(text){
-                    setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text.trim()}])
+                    setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text.trim(), dateCreated: new Date().toLocaleString("en-GB")}])
                     setTimeout(() => {
-                        setMessagesarray(prev => [...prev, {chatType: '', textContent: text}])
+                        setMessagesarray(prev => [...prev, {chatType: '', textContent: text, dateCreated: new Date().toLocaleString("en-GB")}])
                     }, 3000)
                 }
                 
             }} />
         </div>
     </section>
-  )
+    )
+
+  return renderedOutput
 }
 
 export default Page

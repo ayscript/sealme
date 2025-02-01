@@ -3,27 +3,47 @@ import React, { useEffect, useState } from 'react'
 import Header from '@/components/Header'
 import Button from '@/components/Button';
 import Link from 'next/link';
+import {db} from '@/firebase/firebaseConfig'
 
-function randomString(){
-  const characters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',]
-  let chatId = "";
-  for(let i = 0; i < 10; i++){
-    const randomlink = Math.floor(Math.random() * characters.length)
-    chatId += characters[randomlink]
-  }
+// function randomString(){
+//   const characters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',]
+//   let chatId = "";
+//   for(let i = 0; i < 10; i++){
+//     const randomlink = Math.floor(Math.random() * characters.length)
+//     chatId += characters[randomlink]
+//   }
 
-  return `${window.location.href}/${chatId}`
-}
+//   return `${window.location.href}/${chatId}`
+// }
+
 
 const Page = () => {
 
   const [showPopup, setShowPopup] = useState(false)
   const [chatLink, setChatLink] = useState('')
   const [chatCreated, setChatCreated] = useState(true)
+  
+  const [chatRoomName, setChatRoomName] = useState('')
+  const [chatCapacity, setChatCapacity] = useState(0)
+  const [chatRules, setChatRules] = useState('')
+  
+// Function to create a document
+async function createChatRoom() {
+  try {
+    // Reference to the main collection
+    const mainCollectionRef = collection(db, "chats");
 
-    useEffect(() => {
-        console.log(randomString())
-    }, [])
+    // Add a new document to the main collection
+    const docRef = await addDoc(mainCollectionRef, {chatRoomName,chatCapacity,chatRules});
+    
+    setChatLink(`${window.location.href}/${docRef.id}`)
+    setShowPopup(true)
+    setChatCreated(false)
+    console.log(`Document created with ID: ${docRef.id}`);
+  } catch (error) {
+    console.error("Error creating document or sub-collection:", error);
+  }
+}
 
   return (
     <>
@@ -32,9 +52,7 @@ const Page = () => {
       <form action="" className='flex flex-col gap-4 w-[80%] max-w-[480px] mx-auto mt-4' onSubmit={e => {
         e.preventDefault()
         if(chatCreated){
-          setShowPopup(true)
-          setChatLink(randomString())
-          setChatCreated(false)
+          createChatRoom()
         }
         }}>
         <div className='flex flex-col gap-2'>
