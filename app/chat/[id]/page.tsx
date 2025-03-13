@@ -29,21 +29,19 @@ function displayDate(firebaseDate: firebase.firestore.Timestamp) {
 
 const Page = () => {
 
-    const [messagesArray, setMessagesarray] = useState([
-        {
-            chatType: 'other',
-            textContent: 'Welcome to the chat',
-            dateCreated: new Date().toLocaleString("en-GB"),
-            timestamp: new Date() // Add timestamp for sorting
-        },
-    ])
+    interface Message {
+        chatType: string;
+        textContent: string;
+        dateCreated: string;
+        timestamp: firebase.firestore.Timestamp | firebase.firestore.FieldValue;
+    }
+    
+    const [messagesArray, setMessagesarray] = useState<Message[]>([])
     const [chatId, setChatId] = useState('')
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const id = window.location.pathname.split('/')[2];
-            setChatId(id);
-        }
+        const id = window.location.pathname.split('/')[2];
+        setChatId(id);
     }, []);
 
     useEffect(() => {
@@ -57,12 +55,16 @@ const Page = () => {
                         chatType: messageData.sender,
                         textContent: messageData.message,
                         dateCreated: displayDate(messageData.timestamp),
-                        timestamp: messageData.timestamp // Add timestamp for sorting
+                        timestamp: messageData.timestamp, // Add timestamp for sorting
+                        sender: messageData.sender,
+                        message: messageData.message
                     };
                 });
 
                 // Sort messages by timestamp
-                newMessages.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
+                newMessages.sort((a, b) => {
+                        return a.timestamp - b.timestamp;
+                });
 
                 setMessagesarray(newMessages);
             });
@@ -81,7 +83,6 @@ const Page = () => {
         try {
             const mainCollectionRef = collection(db, `chats/${chatId}/chats`);
             const docRef = await addDoc(mainCollectionRef, message);
-            console.log(`Document created with ID: ${docRef.id}`);
         } catch (error) {
             console.error("Error creating document or sub-collection:", error);
         }
@@ -113,7 +114,7 @@ const Page = () => {
                 </section>
                 <Input onClick={function(text: string) {
                     if (text) {
-                        storeMessage({ sender: 'self', message: text.trim(), timestamp: serverTimestamp() });
+                        storeMessage({ chatType: 'self', textContent: text.trim(), dateCreated: '', sender: 'self', message: text.trim(), timestamp: serverTimestamp() });
                     }
                 }} />
             </div>
