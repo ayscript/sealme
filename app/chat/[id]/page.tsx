@@ -82,7 +82,7 @@ const Page = () => {
     async function storeMessage(message: Message): Promise<void> {
         try {
             const mainCollectionRef = collection(db, `chats/${chatId}/chats`);
-            const docRef = await addDoc(mainCollectionRef, message);
+            await addDoc(mainCollectionRef, message);
         } catch (error) {
             console.error("Error creating document or sub-collection:", error);
         }
