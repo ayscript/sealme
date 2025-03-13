@@ -28,19 +28,4 @@ function anonymouslySignIn(){
   });
 }
 
-
-function sendMessage(){
-      // Reference to the sub-collection "chats" within the newly created document
-    const chatsCollectionRef = collection(docRef, "chats");
-
-    // Add a document to the "chats" sub-collection
-    await addDoc(chatsCollectionRef, {
-      message: "Welcome to the chat!",
-      timestamp: new Date(),
-      sender: "Admin"
-    });
-
-    console.log("Sub-collection document created successfully.");
-}
-
 export {db}

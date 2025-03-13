@@ -1,57 +1,121 @@
 'use client'
-import Chat from '@/components/Chat'
-import Input from '@/components/Input'
-import React, { useEffect, useRef, useState } from 'react'
+import Chat from '@/components/Chat';
+import Input from '@/components/Input';
+import React, { useEffect, useRef, useState } from 'react';
+import { db } from '@/firebase/firebaseConfig';
+import { addDoc, collection, serverTimestamp, onSnapshot } from 'firebase/firestore';
 
+function displayDate(firebaseDate: any) {
+    if (!firebaseDate) {
+        return "Date processing"
+    }
+    
+    const date = firebaseDate.toDate()
+    
+    const day = date.getDate()
+    const year = date.getFullYear()
+    
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const month = monthNames[date.getMonth()]
+
+    let hours = date.getHours()
+    let minutes = date.getMinutes()
+    hours = hours < 10 ? "0" + hours : hours
+    minutes = minutes < 10 ? "0" + minutes : minutes
+
+    return `${day} ${month} ${year} - ${hours}:${minutes}`
+}
 
 const Page = () => {
-const scrollRef = useRef<HTMLDivElement | null>(null);
-const scrollToBottom = () => {
-    if (scrollRef.current) {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-      }
-  }
 
- 
-const [messagesArray, setMessagesarray] = useState([
-    {
-        chatType: 'other',
-        textContent: 'Welcome to the chat',
-        dateCreated: new Date().toLocaleString("en-GB")
-    },
-])
+    const [messagesArray, setMessagesarray] = useState([
+        {
+            chatType: 'other',
+            textContent: 'Welcome to the chat',
+            dateCreated: new Date().toLocaleString("en-GB"),
+            timestamp: new Date() // Add timestamp for sorting
+        },
+    ])
+    const [chatId, setChatId] = useState('')
 
-const messageArrayOutput = messagesArray.map((e, index)=> 
-    { return <Chat chatType={e.chatType} dateCreated={e.dateCreated} key={index}>{e.textContent}</Chat>} 
-)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const id = window.location.pathname.split('/')[2];
+            setChatId(id);
+        }
+    }, []);
 
-useEffect(() => {
-    scrollToBottom();
-  }, [messagesArray]);
-  
-  
-  
-  const renderedOutput = (
-    <section className='flex flex-col sm:flex-row h-[100svh]'>
-        <section className='bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]'></section>
-        <div className='flex flex-col w-full sm:w-3/4 h-[90%] sm:h-full'>
-            <section className='flex-col z-0 flex justify-start p-5 canvass relative overflow-auto bg-background flex-1' ref={scrollRef}>
-                {messageArrayOutput}
-            </section>
-            <Input onClick={function(text: string){
-                if(text){
-                    setMessagesarray(prev => [...prev, {chatType: 'self', textContent: text.trim(), dateCreated: new Date().toLocaleString("en-GB")}])
-                    setTimeout(() => {
-                        setMessagesarray(prev => [...prev, {chatType: '', textContent: text, dateCreated: new Date().toLocaleString("en-GB")}])
-                    }, 3000)
-                }
-                
-            }} />
-        </div>
-    </section>
+    useEffect(() => {
+        if (chatId) {
+            const messagesCollectionRef = collection(db, `chats/${chatId}/chats`);
+            const unsubscribe = onSnapshot(messagesCollectionRef, (snapshot) => {
+                const newMessages = snapshot.docs.map((doc) => {
+                    const messageData = doc.data();
+
+                    return {
+                        chatType: messageData.sender,
+                        textContent: messageData.message,
+                        dateCreated: displayDate(messageData.timestamp),
+                        timestamp: messageData.timestamp // Add timestamp for sorting
+                    };
+                });
+
+                // Sort messages by timestamp
+                newMessages.sort((a, b) => a.timestamp - b.timestamp);
+
+                setMessagesarray(newMessages);
+            });
+
+            return () => unsubscribe();
+        }
+    }, [chatId]);
+
+    async function storeMessage(message: { sender: string, message: string, timestamp: any }) {
+        try {
+            const mainCollectionRef = collection(db, `chats/${chatId}/chats`);
+            const docRef = await addDoc(mainCollectionRef, message);
+            console.log(`Document created with ID: ${docRef.id}`);
+        } catch (error) {
+            console.error("Error creating document or sub-collection:", error);
+        }
+    }
+
+    const scrollRef = useRef<HTMLDivElement | null>(null);
+    const scrollToBottom = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }
+
+    // messagesArray.sort((a, b) => a.timestamp - b.timestamp)
+
+    const messageArrayOutput = messagesArray.map((e, index) => (
+        <Chat chatType={e.chatType} dateCreated={e.dateCreated} key={index}>
+            {e.textContent}
+        </Chat>
+    ));
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messagesArray]);
+
+    const renderedOutput = (
+        <section className='flex flex-col sm:flex-row h-[100svh]'>
+            <section className='bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]'></section>
+            <div className='flex flex-col w-full sm:w-3/4 h-[90%] sm:h-full'>
+                <section className='flex-col z-0 flex justify-start p-5 canvass relative overflow-auto bg-background flex-1' ref={scrollRef}>
+                    {messageArrayOutput}
+                </section>
+                <Input onClick={function(text: string) {
+                    if (text) {
+                        storeMessage({ sender: 'self', message: text.trim(), timestamp: serverTimestamp() });
+                    }
+                }} />
+            </div>
+        </section>
     )
 
-  return renderedOutput
+    return renderedOutput
 }
 
 export default Page

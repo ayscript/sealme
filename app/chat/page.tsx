@@ -1,9 +1,10 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Header from '@/components/Header'
 import Button from '@/components/Button';
 import Link from 'next/link';
-import {db} from '@/firebase/firebaseConfig'
+import {db} from '@/firebase/firebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
 
 // function randomString(){
 //   const characters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',]
@@ -39,7 +40,24 @@ async function createChatRoom() {
     setChatLink(`${window.location.href}/${docRef.id}`)
     setShowPopup(true)
     setChatCreated(false)
-    console.log(`Document created with ID: ${docRef.id}`);
+
+    async function sendMessage(){
+      // Reference to the sub-collection "chats" within the newly created document
+    const chatsCollectionRef = collection(docRef, "chats");
+
+    // Add a document to the "chats" sub-collection
+    await addDoc(chatsCollectionRef, {
+      message: "Welcome to the chat!",
+      timestamp: new Date(),
+      sender: "Admin"
+    });
+
+    console.log("Sub-collection document created successfully.");
+}
+
+sendMessage()
+
+console.log(`Document created with ID: ${docRef.id}`);
   } catch (error) {
     console.error("Error creating document or sub-collection:", error);
   }
@@ -57,15 +75,22 @@ async function createChatRoom() {
         }}>
         <div className='flex flex-col gap-2'>
             <label htmlFor="w">Enter Chat Room Name</label>
-            <input className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' type="text" placeholder='Give your chat room a name' required />
+            <input className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' type="text" placeholder='Give your chat room a name' value={chatRoomName} onChange={e => {
+              setChatRoomName(e.target.value)
+            }} required />
         </div>
         <div className='flex flex-col gap-2'>
             <label htmlFor="w">Number of people you want</label>
-            <input className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' type="number" min={'8'} max={'256'} placeholder='Default (256)' />
+            <input className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' type="number" min={'8'} max={'256'} placeholder='Default (256)' value={chatCapacity} onChange={e => {
+              setChatCapacity(Number(e.target.value))
+            }} />
         </div>
         <div className='flex flex-col gap-2'>
             <label htmlFor="w">State the chat room rules and guidelines</label>
-            <textarea className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' placeholder='Briefly mention the rules and regulations each member of the chat has to follow before joining the anonymous chat.' style={{height: '150px', resize: 'block', minHeight: '100px'}}></textarea>
+            <textarea className='bg-transparent py-3 px-4 border outline-none focus:border-primary rounded border-solid placeholder:text-gray-400 dark:placeholder:text-gray-700' placeholder='Briefly mention the rules and regulations each member of the chat has to follow before joining the anonymous chat.' style={{height: '150px', resize: 'block', minHeight: '100px'}} value={chatRules} onChange={e => {
+              setChatRules(e.target.value)
+            }} required
+            ></textarea>
         </div>
         <Button>Create Chat</Button>
       </form>
