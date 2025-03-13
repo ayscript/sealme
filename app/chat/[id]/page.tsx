@@ -108,7 +108,7 @@ const Page = () => {
     const renderedOutput = (
         <section className='flex flex-col sm:flex-row h-[100svh]'>
             <section className='bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]'></section>
-            <div className='flex flex-col w-full sm:w-3/4 h-[90%] sm:h-full'>
+            <div className='flex flex-col w-full sm:w-3/4 h-[90%] sm:h-full overflow-hidden'>
                 <section className='flex-col z-0 flex justify-start p-5 canvass relative overflow-auto bg-background flex-1' ref={scrollRef}>
                     {messageArrayOutput}
                 </section>
