@@ -4,8 +4,9 @@ import Input from '@/components/Input';
 import React, { useEffect, useRef, useState } from 'react';
 import { db } from '@/firebase/firebaseConfig';
 import { addDoc, collection, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
 
-function displayDate(firebaseDate: any) {
+function displayDate(firebaseDate: firebase.firestore.Timestamp) {
     if (!firebaseDate) {
         return "Date processing"
     }
@@ -18,10 +19,10 @@ function displayDate(firebaseDate: any) {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     const month = monthNames[date.getMonth()]
 
-    let hours = date.getHours()
-    let minutes = date.getMinutes()
-    hours = hours < 10 ? "0" + hours : hours
-    minutes = minutes < 10 ? "0" + minutes : minutes
+    let hours: string | number = date.getHours()
+    let minutes: string | number = date.getMinutes()
+    hours = hours < 10 ? "0" + hours : hours.toString()
+    minutes = minutes < 10 ? "0" + minutes : minutes.toString()
 
     return `${day} ${month} ${year} - ${hours}:${minutes}`
 }
@@ -61,7 +62,7 @@ const Page = () => {
                 });
 
                 // Sort messages by timestamp
-                newMessages.sort((a, b) => a.timestamp - b.timestamp);
+                newMessages.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
 
                 setMessagesarray(newMessages);
             });
@@ -70,7 +71,13 @@ const Page = () => {
         }
     }, [chatId]);
 
-    async function storeMessage(message: { sender: string, message: string, timestamp: any }) {
+    interface Message {
+            sender: string;
+            message: string;
+            timestamp: firebase.firestore.Timestamp | firebase.firestore.FieldValue
+        }
+
+    async function storeMessage(message: Message): Promise<void> {
         try {
             const mainCollectionRef = collection(db, `chats/${chatId}/chats`);
             const docRef = await addDoc(mainCollectionRef, message);
@@ -86,8 +93,6 @@ const Page = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }
-
-    // messagesArray.sort((a, b) => a.timestamp - b.timestamp)
 
     const messageArrayOutput = messagesArray.map((e, index) => (
         <Chat chatType={e.chatType} dateCreated={e.dateCreated} key={index}>
