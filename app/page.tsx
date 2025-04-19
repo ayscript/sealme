@@ -31,7 +31,7 @@ export default function Home() {
           scalable web applications and solving real-world problems through
           technology. You can connect with Ayomide on{" "}
           <a
-            href="https://github.com/ayomideolaleye"
+            href="https://github.com/ayscript"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 underline"
@@ -40,7 +40,7 @@ export default function Home() {
           </a>{" "}
           or{" "}
           <a
-            href="https://www.linkedin.com/in/ayomideolaleye"
+            href="https://www.linkedin.com/in/ayomide-olaleye-32349a230"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 underline"
