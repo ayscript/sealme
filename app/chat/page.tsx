@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { db } from "@/firebase/firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 
 const Page = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -27,7 +27,7 @@ const Page = () => {
     try {
       setSubmitLoading(true);
       const mainCollectionRef = collection(db, "chats");
-      const docRef = await addDoc(mainCollectionRef, { chatRoomName });
+      const docRef = await addDoc(mainCollectionRef, { chatRoomName, createdAt: Timestamp.now() });
 
       const newChatLink = `${window.location.href}/${docRef.id}`;
       setChatLink(newChatLink);

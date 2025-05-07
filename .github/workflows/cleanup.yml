@@ -1,0 +1,15 @@
+name: Daily Firestore Cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Every day at midnight UTC
+  workflow_dispatch:     # Allow manual trigger too
+
+jobs:
+  call-cleanup-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send POST request to cleanup API
+        run: |
+          curl -X POST "https://your-vercel-app.vercel.app/api/cleanup"
