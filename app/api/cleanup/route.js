@@ -10,7 +10,7 @@ if (!getApps().length) {
 
 const db = getFirestore();
 
-export async function POST(req) {
+export async function POST() {
   const now = Date.now();
   const dayAgo = new Date(now - 24 * 60 * 60 * 1000);
 
