@@ -32,6 +32,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="text-center text-sm text-gray-500 py-4">
+          <p>
+            &copy; {new Date().getFullYear()}{" "}
+          </p>
+          <p>By using this application, you agrre to our terms and conditions stated <a href="/terms.html" className="text-blue-500 underline">here</a></p>
+        </footer>
       </body>
     </html>
   );
