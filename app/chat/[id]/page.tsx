@@ -187,8 +187,8 @@ const Page = () => {
       <section className="bg-foreground flex max-sm:border-b p-4 sticky top-0 sm:flex-col gap-4 items-center justify-center w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]">
         <h1 className="text-lg font-bold">Chat Room: {chatRoomName}</h1>
         <Button className="text-xs" onClick={() => setShowPopup(true)}>Buy Me A Coffee</Button>
-        {showPopup ? <BuyMeCoffee setShowPopup={setShowPopup} /> : null}
       </section>
+      {showPopup ? <BuyMeCoffee setShowPopup={setShowPopup} /> : null}
       <div className="flex flex-col items-center w-full sm:w-3/4 h-full overflow-hidden relative mx-auto">
         <section
           className="flex-col w-full z-0 flex justify-start h-[70vh] p-5 relative overflow-auto overflow-x-hidden"

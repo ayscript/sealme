@@ -1,4 +1,3 @@
-'use client'
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
 
@@ -65,7 +64,7 @@ const BuyMeCoffee: React.FC<BuyMeCoffeeProps> = ({ setShowPopup }) => {
   };
 
   return (
-    <div className="absolute bg-[#33333356] backdrop-blur-md top-0 bottom-0 left-0 right-0 z-[10000] flex items-center justify-center">
+    <div className="absolute bg-[#33333356] backdrop-blur-md top-0 bottom-0 left-0 right-0 z-50 flex items-center justify-center">
       <div className="p-4 bg-white text-gray-800 rounded-xl shadow-md w-full max-w-md mx-auto mt-8">
         <h2 className="text-lg font-bold mb-4">☕ Buy Me Coffee</h2>
         <p className="text-sm text-gray-400">You can support me 🙏 by buying me a coffee, I would be grateful 😊.</p>
