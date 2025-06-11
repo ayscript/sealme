@@ -26,18 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="theme-color" content="#0E1217" />
+        <meta name="theme-color" content="#4F46E5" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <footer className="text-center text-sm text-gray-500 py-4">
-          <p>
-            &copy; {new Date().getFullYear()}{" "}
-          </p>
-          <p>By using this application, you agrre to our terms and conditions stated <a href="/terms.html" className="text-blue-500 underline">here</a></p>
-        </footer>
       </body>
     </html>
   );

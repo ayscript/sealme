@@ -21,7 +21,7 @@ export async function POST() {
 
   const deletes = [];
   snapshot.forEach((doc) => {
-    deletes.push(doc.ref.delete());
+    deletes.push(db.collection('chats').doc(doc.id).delete());
   });
 
   await Promise.all(deletes);

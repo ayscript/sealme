@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import Link from "next/link";
 import { db } from "@/firebase/firebaseConfig";
 import { addDoc, collection, Timestamp } from "firebase/firestore";
+import { Trash } from "@/components/Icon";
 
 const Page = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -12,13 +13,16 @@ const Page = () => {
   const [chatCreated, setChatCreated] = useState(true);
   const [chatRoomName, setChatRoomName] = useState("");
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [createdChats, setCreatedChats] = useState<string[]>([]);
+  const [createdChats, setCreatedChats] = useState<
+    { chatRoomName: string; newChatLink: string }[]
+  >([]);
 
   // Load chats from localStorage on component mount
   useEffect(() => {
     const storedChats = localStorage.getItem("createdChats");
     if (storedChats) {
-      setCreatedChats(JSON.parse(storedChats));
+      const storedChatObject = JSON.parse(storedChats);
+      setCreatedChats(storedChatObject);
     }
   }, []);
 
@@ -27,7 +31,10 @@ const Page = () => {
     try {
       setSubmitLoading(true);
       const mainCollectionRef = collection(db, "chats");
-      const docRef = await addDoc(mainCollectionRef, { chatRoomName, createdAt: Timestamp.now() });
+      const docRef = await addDoc(mainCollectionRef, {
+        chatRoomName,
+        createdAt: Timestamp.now(),
+      });
 
       const newChatLink = `${window.location.href}/${docRef.id}`;
       setChatLink(newChatLink);
@@ -35,11 +42,19 @@ const Page = () => {
       setChatCreated(false);
 
       // Save the new chat link to localStorage
-      const updatedChats = [...createdChats, newChatLink];
-      setCreatedChats(updatedChats);
-      localStorage.setItem("createdChats", JSON.stringify(updatedChats));
+      if (createdChats) {
+        const updatedChats = [
+          ...createdChats,
+          {
+            chatRoomName,
+            newChatLink,
+          },
+        ];
+        setCreatedChats(updatedChats);
+        localStorage.setItem("createdChats", JSON.stringify(updatedChats));
 
-      setSubmitLoading(false);
+        setSubmitLoading(false);
+      }
     } catch (error) {
       console.error("Error creating document:", error);
       setSubmitLoading(false);
@@ -88,22 +103,49 @@ const Page = () => {
 
       {/* Display chats created on this browser */}
       <section className="mt-8 w-[80%] max-w-[480px] mx-auto">
-        <h2 className="text-lg font-bold mb-4">Chats Created on This Browser</h2>
-        {createdChats.length > 0 ? (
-          <ul className="list-disc pl-5">
-            {createdChats.map((chat, index) => (
-              <li key={index} className="mb-2 flex flex-col items-start gap-4">
-                <Link href={chat} className="text-primary underline flex-1">
-                  {chat.length > 30 ? `${chat.slice(0, 30)}...` : chat}
-                </Link>
-                <Button
-                  onClick={() => handleShare(chat)}
-                  className="bg-primary text-white px-3 py-1 rounded"
+        <h2 className="text-lg font-bold mb-4">
+          Chats Created on This Browser
+        </h2>
+        {createdChats && createdChats.length > 0 ? (
+          <ul className="">
+            {createdChats.map((chat, index) =>
+              chat.newChatLink ? (
+                <li
+                  key={index}
+                  className="mb-4 border flex flex-col items-start gap-4 p-[12px]"
                 >
-                  Share
-                </Button>
-              </li>
-            ))}
+                  <p className="font-bold text-lg">{chat.chatRoomName}</p>
+                  <Link
+                    href={chat.newChatLink}
+                    className="text-primary underline flex-1 text-sm"
+                  >
+                    {chat.newChatLink.length > 30 ? `${chat.newChatLink.slice(0,30)}...` : chat.newChatLink}
+                  </Link>
+                  <div className="flex gap-3">
+                    <Link href={chat.newChatLink}>
+                      <Button>Open</Button>
+                    </Link>
+                    <Button
+                      onClick={() => handleShare(chat.newChatLink)}
+                      className="bg-primary text-white px-3 py-1 rounded"
+                    >
+                      Share
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const filteredChats = createdChats.filter(item => item.newChatLink !== chat.newChatLink)
+                        localStorage.setItem('createdChats', JSON.stringify(filteredChats))
+                        setCreatedChats(filteredChats)
+                      }}
+                      className="bg-transparent p-0"
+                      title="delete chat"
+                    >
+                      <Trash />
+                    </Button>
+                  </div>
+                </li>
+              ) : null
+            )}
           </ul>
         ) : (
           <p>No chats created yet.</p>
@@ -130,8 +172,12 @@ const Page = () => {
             <div className="flex w-full items-center justify-center gap-4">
               <Button
                 onClick={() => {
-                  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
-                    navigator.clipboard.writeText(chatLink)
+                  if (
+                    navigator.clipboard &&
+                    typeof navigator.clipboard.writeText === "function"
+                  ) {
+                    navigator.clipboard
+                      .writeText(chatLink)
                       .then(() => {
                         alert("Chat link copied to clipboard!");
                       })

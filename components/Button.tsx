@@ -1,17 +1,20 @@
 import React from "react";
 
-const Button = (props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  children:
-    | string
-    | number
-    | bigint
-    | boolean
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | Promise<React.AwaitedReactNode>
-    | null
-    | undefined;
-}) => {
+const Button: React.FC<
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    children:
+      | string
+      | number
+      | bigint
+      | boolean
+      | Iterable<React.ReactNode>
+      | React.ReactPortal
+      | Promise<React.AwaitedReactNode>
+      | null
+      | undefined
+      | React.ReactNode;
+  }
+> = (props) => {
   return (
     <button
       {...props}
