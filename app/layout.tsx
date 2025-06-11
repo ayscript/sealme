@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Script from 'next/script';
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -29,12 +29,9 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#4F46E5" />
         <Script
-  src="https://js.paystack.co/v1/inline.js"
-  strategy="afterInteractive" // or "lazyOnload"
-  onLoad={() => {
-    console.log('Paystack script loaded!');
-  }}
-/>
+          src="https://js.paystack.co/v1/inline.js"
+          strategy="afterInteractive" // or "lazyOnload"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
