@@ -166,7 +166,7 @@ const Page = () => {
       <section className="bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]"></section>
       <div className="flex flex-col items-center w-full sm:w-3/4 h-full overflow-hidden relative mx-auto">
         <section
-          className="flex-col z-0 flex justify-start h-[70vh] p-5 relative overflow-auto overflow-x-hidden"
+          className="flex-col w-full z-0 flex justify-start h-[70vh] p-5 relative overflow-auto overflow-x-hidden"
           ref={scrollRef}
         >
           {messageArrayOutput}
