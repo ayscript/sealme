@@ -6,7 +6,7 @@ const Input = (props: { onClick: (arg0: string) => void }) => {
   const [text, setText] = useState('')
 
   return (
-    <form onSubmit={e => {e.preventDefault()}} className='w-[95%] rounded-2xl mb-2 mt-auto focus-within:border focus-within:border-primary absolute bottom-0 bg-foreground py-3 h-24 text-text flex items-center justify-between px-4'>
+    <form onSubmit={e => {e.preventDefault()}} className='w-[95%] rounded-2xl mb-2 border-2 shadow-sm mt-auto focus-within:border focus-within:border-primary absolute bottom-0 bg-foreground py-3 h-24 text-text flex items-center justify-between px-4'>
         <textarea onChange={e => {setText(e.target.value)}} value={text} className='bg-transparent resize-none focus:outline-none w-full h-full' placeholder='Write something ...'></textarea>
         {/* <input type="text" onChange={e => {setText(e.target.value)}} value={text} className='bg-transparent focus:outline-none w-full h-full' placeholder='Write something ...' /> */}
         <button onClick={() => {

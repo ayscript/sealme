@@ -12,11 +12,14 @@ import {
 } from "firebase/firestore";
 import Link from "next/link";
 import Button from "@/components/Button";
+import BuyMeCoffee from "@/components/Modal";
 
 const Page = () => {
   const [messagesArray, setMessagesarray] = useState<Message[]>([]);
   const [chatId, setChatId] = useState("");
-  const [isValidChat, setIsValidChat] = useState<boolean | null>(null); // Track if the chat exists
+  const [isValidChat, setIsValidChat] = useState<boolean | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [chatRoomName, setChatRoomName] = useState("");
 
   interface Message {
     chatType: string;
@@ -37,7 +40,9 @@ const Page = () => {
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12 || 12; // Convert to 12-hour format
 
-    const formattedTime = `${hours}:${minutes < 10 ? "0" + minutes : minutes} ${ampm}`;
+    const formattedTime = `${hours}:${
+      minutes < 10 ? "0" + minutes : minutes
+    } ${ampm}`;
     const formattedDate = `${day} ${month} ${year}`;
 
     return `${formattedDate} - ${formattedTime}`;
@@ -46,6 +51,16 @@ const Page = () => {
   useEffect(() => {
     const id = window.location.pathname.split("/")[2];
     setChatId(id);
+
+    async function getChatRoomName() {
+      const chatRoomDoc = doc(db, "chats", id);
+      const chatRoomSnapshot = await getDoc(chatRoomDoc);
+
+      if (chatRoomSnapshot.exists()) {
+        const data = chatRoomSnapshot.data();
+        setChatRoomName(data.chatRoomName);
+      }
+    }
 
     // Check if the chat exists in Firebase
     const checkChatExists = async () => {
@@ -59,6 +74,7 @@ const Page = () => {
     };
 
     checkChatExists();
+    getChatRoomName();
   }, []);
 
   useEffect(() => {
@@ -67,7 +83,8 @@ const Page = () => {
       const unsubscribe = onSnapshot(
         messagesCollectionRef,
         (snapshot) => {
-          const newMessages = snapshot.docChanges()
+          const newMessages = snapshot
+            .docChanges()
             .filter((change) => change.type === "added") // Only process new messages
             .map((change) => {
               const messageData = change.doc.data();
@@ -134,7 +151,11 @@ const Page = () => {
   };
 
   const messageArrayOutput = messagesArray.map((e, index) => (
-    <Chat chatType={e.chatType} dateCreated={formatDate(e.dateCreated)} key={index}>
+    <Chat
+      chatType={e.chatType}
+      dateCreated={formatDate(e.dateCreated)}
+      key={index}
+    >
       {e.textContent}
     </Chat>
   ));
@@ -163,7 +184,11 @@ const Page = () => {
 
   const renderedOutput = (
     <section className="flex flex-col sm:flex-row h-[100svh]">
-      <section className="bg-foreground w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]"></section>
+      <section className="bg-foreground flex max-sm:border-b p-4 sticky top-0 sm:flex-col gap-4 items-center justify-center w-full sm:w-1/4 h-[10%] sm:h-full border-r border-[#e0d9d9] dark:border-[#3d3b3b]">
+        <h1 className="text-lg font-bold">Chat Room: {chatRoomName}</h1>
+        <Button className="text-xs" onClick={() => setShowPopup(true)}>Buy Me A Coffee</Button>
+        {showPopup ? <BuyMeCoffee setShowPopup={setShowPopup} /> : null}
+      </section>
       <div className="flex flex-col items-center w-full sm:w-3/4 h-full overflow-hidden relative mx-auto">
         <section
           className="flex-col w-full z-0 flex justify-start h-[70vh] p-5 relative overflow-auto overflow-x-hidden"

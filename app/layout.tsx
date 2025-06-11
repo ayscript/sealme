@@ -27,6 +27,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#4F46E5" />
+        <script src="https://js.paystack.co/v1/inline.js"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
