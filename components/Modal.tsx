@@ -3,9 +3,21 @@ import confetti from "canvas-confetti";
 
 declare global {
   interface Window {
-    PaystackPop: any;
+    PaystackPop: {
+      setup: (options: {
+        key: string;
+        email: string;
+        amount: number;
+        currency?: string;
+        callback: (response: { reference: string }) => void;
+        onClose: () => void;
+      }) => {
+        openIframe: () => void;
+      };
+    };
   }
 }
+
 
 interface BuyMeCoffeeProps {
   setShowPopup: (show: boolean) => void;
